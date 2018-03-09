@@ -35,8 +35,8 @@
 <script>
   var paragraph = document.getElementById("location");
   function getLocation() {
-    if (navigator.Geolocation) {
-      navigator.Geolocation.getCurrentPosition(showPosition);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
     }
     else {
       paragraph.innerHTML = "Geolocation not available"
