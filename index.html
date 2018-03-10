@@ -9,10 +9,12 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css">
+  <!-- <link rel="stylesheet" href="style.css"> -->
 
   <!-- JS Libraries -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -22,10 +24,13 @@
   <!-- Start of Container fluid for one page website -->
   <div class="container-fluid">
     <div id="title-div">
+      <img id="weather-icon" src="" alt="current weather">
     </div>
     <div class="" id="weather-div">
       <button onclick="getLocation()">Press for location</button>
       <p id="location">
+      </p>
+      <p id="weather">
       </p>
     </div>
 
@@ -33,18 +38,40 @@
 
 <!-- JS Geolocation, Get-requests and display modification -->
 <script>
+
   var paragraph = document.getElementById("location");
+  var display = document.getElementById("weather");
   function getLocation() {
+    console.log("Button Pressed");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
     }
     else {
-      paragraph.innerHTML = "Geolocation not available"
-    }
-    function showPosition(position) {
-      paragraph.innerHTML = "Lat: " + position.coords.latitude + "Long: " + position.coords.longitude;
+      paragraph.innerHTML = "Geolocation not available";
     }
   }
+  function showPosition(position) {
+    console.log("https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude);
+
+      $.ajax({
+        url: "https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude,
+        dataType: 'json',
+        type: 'get',
+        cache: false,
+        success: function(data) {
+          console.log(data.weather[0].icon);
+          document.getElementById("weather-icon").src = data.weather[0].icon;
+        }
+      });
+
+    // $.getJSON("https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude, function(a) {
+    //       $("#weather-div").append(a[0][weather] + "<p>&mdash; " + a[0] + "</p>")
+    //       console.log(a[0][weather]);
+    //     });
+
+    //weather.innerHTML = json;
+  }
+
 </script>
 </body>
 
