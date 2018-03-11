@@ -13,8 +13,7 @@
 
   <!-- JS Libraries -->
   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -36,43 +35,42 @@
 
   </div>
 
-<!-- JS Geolocation, Get-requests and display modification -->
-<script>
+  <!-- JS Geolocation, Get-requests and display modification -->
+  <script>
+    var paragraph = document.getElementById("location");
+    var display = document.getElementById("weather");
 
-  var paragraph = document.getElementById("location");
-  var display = document.getElementById("weather");
-  function getLocation() {
-    console.log("Button Pressed");
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
+    function precisionRound(number, precision) {
+      var factor = Math.pow(10, precision);
+      return Math.round(number * factor) / factor;
     }
-    else {
-      paragraph.innerHTML = "Geolocation not available";
+
+    function getLocation() {
+      console.log("Button Pressed");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        paragraph.innerHTML = "Geolocation not available";
+      }
     }
-  }
-  function showPosition(position) {
-    console.log("https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude);
+
+    function showPosition(position) {
+      console.log("https://fcc-weather-api.glitch.me/api/current?lat=" + precisionRound(position.coords.latitude, 1) + "&lon=" + precisionRound(position.coords.longitude, 1));
 
       $.ajax({
-        url: "https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude,
+        url: "https://fcc-weather-api.glitch.me/api/current?lat=" + precisionRound(position.coords.latitude, 1) + "&lon=" + precisionRound(position.coords.longitude, 1),
         dataType: 'json',
         type: 'get',
         cache: false,
         success: function(data) {
-          console.log(data.weather[0].icon);
+          console.log(data.name);
           document.getElementById("weather-icon").src = data.weather[0].icon;
+          document.getElementById("location").innerHTML = data.name;
         }
       });
 
-    // $.getJSON("https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude, function(a) {
-    //       $("#weather-div").append(a[0][weather] + "<p>&mdash; " + a[0] + "</p>")
-    //       console.log(a[0][weather]);
-    //     });
-
-    //weather.innerHTML = json;
-  }
-
-</script>
+    }
+  </script>
 </body>
 
 </html>
