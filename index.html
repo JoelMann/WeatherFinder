@@ -9,10 +9,9 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <!-- <link rel="stylesheet" href="style.css"> -->
+  <link rel="stylesheet" href="style.css">
 
   <!-- JS Libraries -->
-  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -21,16 +20,23 @@
 
 <body>
   <!-- Start of Container fluid for one page website -->
-  <div class="container-fluid">
+  <div class="centered">
     <div id="title-div">
-      <img id="weather-icon" src="" alt="current weather">
-    </div>
-    <div class="" id="weather-div">
-      <button onclick="getLocation()">Press for location</button>
+      <img id="weather-icon" src="https://cdn.glitch.com/6e8889e5-7a72-48f0-a061-863548450de5%2F10n.png" alt="current weather">
       <p id="location">
+        What's the weather like in your city?
       </p>
       <p id="weather">
       </p>
+      <p id="degrees">
+      </p>
+      <p id="condition">
+      </p>
+    </div>
+    <div id="weather-div">
+      <button class="btn btn-primary" onclick="getLocation()">Press for location</button>
+      <button class="btn btn-secondary" onclick="changeDegree()">Degrees</button>
+
     </div>
 
   </div>
@@ -39,6 +45,8 @@
   <script>
     var paragraph = document.getElementById("location");
     var display = document.getElementById("weather");
+    var temperature = 0;
+    var cel = true;
 
     function precisionRound(number, precision) {
       var factor = Math.pow(10, precision);
@@ -66,9 +74,30 @@
           console.log(data.name);
           document.getElementById("weather-icon").src = data.weather[0].icon;
           document.getElementById("location").innerHTML = data.name;
+          document.getElementById("condition").innerHTML = data.weather[0].main;
+          temperature = Math.round(data.main.temp);
+          document.getElementById("weather").innerHTML = temperature;
+          document.getElementById("degrees").innerHTML = "Celcius"
         }
       });
+    };
 
+    function changeDegree() {
+      if (cel) {
+        temperature = Math.round(temperature * 1.8 + 32);
+        cel = false;
+        document.getElementById("weather").innerHTML = temperature;
+        document.getElementById("degrees").innerHTML = "Fahrenheit";
+      }
+      else if (!cel) {
+        temperature = Math.round((temperature - 32) * 0.5556);
+        cel = true;
+        document.getElementById("weather").innerHTML = temperature;
+        document.getElementById("degrees").innerHTML = "Celcius";
+      }
+      else {
+        console.log("Error changing degrees");
+      }
     }
   </script>
 </body>
